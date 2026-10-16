@@ -1,0 +1,29 @@
+Upstream sync and local distribution profile — 2026-10-16
+
+Base in our repository: 70414721852ebaccc7a237aaf3da0c7ac5459be4.
+Independent upstream checkout: https://github.com/d2r-mobile/d2r-mobile, default branch dev.
+Imported snapshot: 75a1a16a2665b5edc43594e7432223fb3756918e.
+Upstream c53c0be3c has the same code as our old base, but different history IDs and documentation. This is a content import, not an unrelated-history merge.
+The full upstream snapshot is imported, including companion graphics, serialization, filesystem, cloud merge and build dependencies and other upstream fixes. It is not a two-file cherry-pick.
+
+Key changes: iOS18 older-API mode (079aa4f94), cloud conflict handling (6bb0eee31), personal stash/cloud merge save hotfix (09c2ca3cf).
+Our additions: DM_DISTRIBUTION_PROFILE=1 generates the existing paid-team capability profile without rewriting project.yml. iCloud, App Group, Apple-hosted asset extension and unsupported extra entitlements remain disabled. Team and Bundle ID still come from the existing local.env.
+R2 endpoints come from the delivered full-1.0.4 App, outside Git. No credentials or signed URLs are committed. asset_dl.m and asset_pointers.txt are unchanged from our original tree.
+
+From the project root containing d2r-mobile and 源码打包流程:
+  python3 d2r-mobile/dm/tools/distribution_pipeline.py check --ios18
+  DM_ASTC_PACK=/matching/pack python3 d2r-mobile/dm/tools/distribution_pipeline.py build --ios18 --build-number 1.0.5
+Omit --ios18 for iOS26. The build number is an example; confirm availability before release.
+The existing 源码打包流程/pipeline.py check/build entry points now delegate to this script; its old prepare command only maintains the historical source copy and is not needed for the new pipeline.
+Archives are separated under 源码打包流程/ios18 and ios26. No signing export, upload or installation is performed. Original source copy and its uncommitted project.yml are retained.
+
+Validation:
+- Cloud sync: 94 cases passed (2 fixture-dependent cases skipped by upstream).
+- Filesystem: 68 cases passed; case-sensitive paths: 51 passed.
+- Metal3 render-target GPU test: 19 cases passed on Apple M3 Pro; not iOS18 hardware validation.
+- Distribution project/environment tests: 2 passed, standard and iOS18 profiles checked.
+- Save-related translation units passed C syntax checking.
+- Localization tables, literal scan, native-write/mode/widget-cache scans passed.
+- Upstream literal scan initially flagged two build-script messages; narrow whitelist entries added for those non-UI diagnostics.
+- Real local signing identity and R2 inputs checked without printing or committing credentials.
+- Full preflight still fails for missing ExeFS/main, sdk, subsdk0. No complete app build, archive, runtime save-loss simulation or iOS18 device test is claimed.
