@@ -1,0 +1,7 @@
+{
+  "upstream": "https://github.com/d2r-mobile/d2r-mobile",
+  "branch": "dev",
+  "revision": "75a1a16a2665b5edc43594e7432223fb3756918e",
+  "previous_local": "70414721852ebaccc7a237aaf3da0c7ac5459be4",
+  "method": "content snapshot with local distribution integration"
+}

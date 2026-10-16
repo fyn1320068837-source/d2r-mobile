@@ -3,3 +3,6 @@
 .iosdd_mac/
 .iosdd_*/
 .DS_Store
+
+# Local upstream synchronization and migration tools
+/.local-sync/
